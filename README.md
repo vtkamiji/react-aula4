@@ -1,25 +1,42 @@
-# ReduxSimpleStarter
+Annotations:
+npm install --save redux
+npm install --save redux-form@6.6.3
+npm install --save redux-promise
+npm install --save axios
+npm install --save react-router-dom@4.0.0
+npm install --save lodash
 
-Interested in learning [Redux](https://www.udemy.com/react-redux/)?
+/*qq que retorna aqui será mostrado em props dentro de BookList
+ *liga o estado do Redux ao estado(props) da classe
+ *posts: estará em this.props.books
+ *state.posts: estado do redux com prop. books(../reducers/index.js)
+ */
+function mapStateToProps(state) {    
+    return { 
+    	posts: state.posts
+    };
+}
 
-### Getting Started
+/* Em "../reducers/index.js"
+ * "formReducer" é um método do redux-form e deve ser mapeado sempre como "form".
+*/
+const rootReducer = combineReducers({
+  posts: PostsReducer,
+  form: formReducer
+});
 
-There are two methods for getting started with this repo.
+/* form: 'PostsNewForm' = nome do form para vários forms(deve ser único) */
+export default reduxForm({
+	 form: 'PostsNewForm'
+})(PostsNew);
 
-#### Familiar with Git?
-Checkout this repo, install dependencies, then start the gulp process with the following:
+/*<Switch> serve para pegar apenas o primeiro caminho que combinar com a URL */
+<BrowserRouter>
+	<Switch>
+		<Route path="/posts/new" component={PostsNew} />
+		<Route path="/" component={PostsIndex}/>
+	</Switch>
+</BrowserRouter>
 
-```
-> git clone https://github.com/StephenGrider/ReduxSimpleStarter.git
-> cd ReduxSimpleStarter
-> npm install
-> npm start
-```
-
-#### Not Familiar with Git?
-Click [here](https://github.com/StephenGrider/ReactStarter/releases) then download the .zip file.  Extract the contents of the zip file, then open your terminal, change to the project directory, and:
-
-```
-> npm install
-> npm start
-```
+/* Para Axios e Redux funcionarem */
+const createStoreWithMiddleware = applyMiddleware(promise)(createStore);

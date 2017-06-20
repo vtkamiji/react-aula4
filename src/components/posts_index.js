@@ -13,6 +13,7 @@ class PostsIndex extends Component {
 	componentWillMount() {}
 
 	renderPosts() {
+		console.log(this.props.posts);
 		return _.map(this.props.posts, post => {
 			return (
 				<li className="list-group-item" key={post.id}>

@@ -9,7 +9,9 @@ export default function(state = {}, action) {
 
 		case FETCH_POSTS:
 			//transformar array em objeto
-			return _.mapKeys(action.payload.data, 'id');			
+			console.log("FETCH_POSTS");
+			console.log(action);
+			return _.mapKeys(action.payload.data, 'id');
 		case FETCH_POST:
 			//JS5
 			//const post = action.payload.data;

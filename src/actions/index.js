@@ -13,10 +13,14 @@ export function fetchPosts() {
 	const request = axios.get(`${ROOT_URL}/posts${API_KEY}`);
 
 	//REDUX THUNK
-	return (dispatch) => {
+	return (dispatch) => {		
 		request.then(({data}) => {
-			dispatch({type: 'FETCH_POSTS', payload: data})
-		});		
+			console.log(data);
+			dispatch({
+				type: FETCH_POSTS, 
+				payload: {data}
+			});
+		});
 	};
 
 	/*return {

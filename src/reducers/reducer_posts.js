@@ -2,15 +2,14 @@ import _ from 'lodash';
 import {FETCH_POSTS, FETCH_POST, DELETE_POST} from '../actions';
 
 export default function(state = {}, action) {
+	console.log('reducer_posts');
 	switch (action.type) {
 		case DELETE_POST: 
 			//se o state tiver o id do post deletado, retira do state
 			return _.omit(state, action.payload);
 
 		case FETCH_POSTS:
-			//transformar array em objeto
-			console.log("FETCH_POSTS");
-			console.log(action);
+			//transformar array em objeto			
 			return _.mapKeys(action.payload.data, 'id');
 		case FETCH_POST:
 			//JS5

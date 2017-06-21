@@ -6,6 +6,11 @@ import { createPessoa } from '../../actions/pessoaActions';
 
 class PessoaNew extends Component {
 
+	componentDidMount() {
+		console.log('PessoqNew-ComponentDidMount');
+		console.log(this.props.pessoas);
+	}
+
 	renderField(field) {
 		const { meta: { touched, error } } = field;
 		const className = `form-group ${touched && error ? 'has-danger' : ''}`;
@@ -14,7 +19,7 @@ class PessoaNew extends Component {
 			<div className={className}>
 				<label htmlFor={field.label}>{field.label}</label>
 				<input name={field.name} type={field.type} 
-					{...field.input}
+					{...field.input}					
 					className="form-control"/>
 			
 				<div className="text-help">
@@ -39,7 +44,6 @@ class PessoaNew extends Component {
 					<Field name="id" label="id" type="number" component={this.renderField}/>
 					<Field name="nome" label="Nome" type="text" component={this.renderField}/>
 					<Field name="idade" label="Idade" type="number" component={this.renderField}/>
-
 					
 					<button type="submit" className="btn btn-primary pull-xs-right">Adicionar Pessoa</button> 
 					
@@ -53,7 +57,11 @@ function validate(values) {
 
 }
 
+function mapStateToProps({pessoa}) {		
+	return pessoa ;
+}
+
 export default reduxForm({
 	validate: validate,
 	form: 'PessoaNewForm'
-})(connect(null, {createPessoa})(PessoaNew));
+})(connect(mapStateToProps, {createPessoa})(PessoaNew));

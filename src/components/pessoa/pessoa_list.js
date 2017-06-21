@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { fetchPessoa, deletePessoa } from '../../actions/pessoaActions';
+import { change } from 'redux-form';
+import { fetchPessoa, deletePessoa, alterarPessoa } from '../../actions/pessoaActions';
 import _ from 'lodash';
 
 class PessoaList extends Component {
@@ -13,7 +14,8 @@ class PessoaList extends Component {
 	}
 	
 	alterarPessoa(pessoa) {
-		
+		this.props.change(pessoa);
+		this.props.alterarPessoa(pessoa);
 	}
 
 	renderPessoas() {
@@ -28,7 +30,7 @@ class PessoaList extends Component {
 							<div className="pull-xs-right">
 								<button className="btn btn-secondary" 									
 									style={{marginRight: '10px'}}
-									onClick={this.alterarPessoa.bind(this.pessoa)}>
+									onClick={this.alterarPessoa.bind(this,pessoa)}>
 									Alterar
 								</button>
 								<button className="btn btn-danger" 
@@ -73,4 +75,5 @@ function mapStateToProps(state) {
 	return {pessoas: state.pessoas};
 }
 
-export default connect(mapStateToProps, {fetchPessoa, deletePessoa})(PessoaList);
+export default connect(mapStateToProps, 
+	{fetchPessoa, deletePessoa, alterarPessoa, change})(PessoaList);

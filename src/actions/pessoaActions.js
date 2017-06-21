@@ -3,6 +3,7 @@ import _ from 'lodash';
 export const FETCH_PESSOA = 'fetch_pessoa';
 export const CREATE_PESSOA = 'create_pessoa';
 export const DELETE_PESSOA = 'delete_pessoa';
+export const ALTERAR_PESSOA = 'alterar_pessoa';
 
 const listaPessoas = [{id:1,nome:'Valter', idade:34}];
 
@@ -26,9 +27,15 @@ export function createPessoa(pessoa, callback) {
 
 export function deletePessoa(pessoa) {
 	_.pull(listaPessoas, pessoa);
-
 	return {
 		type: DELETE_PESSOA,
-		payload: pessoa.id
+		payload: {data: pessoa.id}
+	}
+}
+
+export function alterarPessoa(pessoa) {	
+	return {
+		type: ALTERAR_PESSOA,
+		payload: {data: pessoa}
 	}
 }

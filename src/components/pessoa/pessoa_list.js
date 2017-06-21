@@ -1,21 +1,42 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { fetchPessoa } from '../../actions/pessoaActions';
+import { fetchPessoa, deletePessoa } from '../../actions/pessoaActions';
 import _ from 'lodash';
 
 class PessoaList extends Component {
-	componentDidMount() {		
-		console.log("componentDidMount");
-		this.props.fetchPessoa();
-		console.log(this.props.pessoas);
+	componentDidMount() {				
+		this.props.fetchPessoa();		
+	}
+
+	deletePessoa(pessoa) {		
+		this.props.deletePessoa(pessoa);
+	}
+	
+	alterarPessoa(pessoa) {
+		
 	}
 
 	renderPessoas() {
 		return _.map(this.props.pessoas, pessoa => {
-				return (
-					<li key={pessoa.id}>
-						{pessoa.nome}
-					</li>
+				
+				return (					
+					<tr key={pessoa.id}>
+						<td style={{width:'10%'}}>{pessoa.id}</td>
+						<td style={{width:'30%'}}>{pessoa.nome}</td>
+						<td style={{width:'10%'}}>{pessoa.idade}</td>	
+						<td>
+							<div className="pull-xs-right">
+								<button className="btn btn-secondary" 									
+									style={{marginRight: '10px'}}
+									onClick={this.alterarPessoa.bind(this.pessoa)}>
+									Alterar
+								</button>
+								<button className="btn btn-danger" 
+									onClick={this.deletePessoa.bind(this,pessoa)}>Apagar
+								</button>							
+							</div>
+						</td>					
+					</tr>
 				);
 			});
 	}
@@ -28,17 +49,28 @@ class PessoaList extends Component {
 		}
 
 		return (
-			<ul>
-				{this.renderPessoas()}
-			</ul>
+			<div>	
+				<h2>Lista de Pessoas Cadastradas</h2>
+				<table className="table table-striped">
+					<thead>
+					    <tr>
+					      	<th>#</th>
+					      	<th>Nome</th>
+					      	<th>Idade</th>
+					      	<th>Ação</th>
+					    </tr>
+					</thead>
+					<tbody>
+						{this.renderPessoas()}
+					</tbody>
+				</table>
+			</div>
 		);		
 	}
 }
 
 function mapStateToProps(state) {
-	console.log("STATE");
-	console.log(state);
 	return {pessoas: state.pessoas};
 }
 
-export default connect(mapStateToProps, {fetchPessoa})(PessoaList);
+export default connect(mapStateToProps, {fetchPessoa, deletePessoa})(PessoaList);

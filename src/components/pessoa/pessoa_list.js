@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { change } from 'redux-form';
+import { reduxForm, change } from 'redux-form';
 import { fetchPessoa, deletePessoa, alterarPessoa } from '../../actions/pessoaActions';
 import _ from 'lodash';
 import { PESSOA_FORM } from './pessoa_new';
@@ -14,11 +14,12 @@ class PessoaList extends Component {
 		this.props.deletePessoa(pessoa);
 	}
 	
-	alterarPessoa(pessoa) {
-		this.props.change(PESSOA_FORM, 'id', pessoa.id);
-		this.props.change(PESSOA_FORM, 'nome', pessoa.nome);
-		this.props.change(PESSOA_FORM, 'idade', pessoa.idade);
+	alterarPessoa(pessoa) {		
+		// this.props.change(PESSOA_FORM, 'id', pessoa.id);
+		// this.props.change(PESSOA_FORM, 'nome', pessoa.nome);
+		// this.props.change(PESSOA_FORM, 'idade', pessoa.idade);
 		this.props.alterarPessoa(pessoa);
+		
 	}
 
 	renderPessoas() {
@@ -78,5 +79,6 @@ function mapStateToProps(state) {
 	return {pessoas: state.pessoas};
 }
 
-export default connect(mapStateToProps, 
-	{fetchPessoa, deletePessoa, alterarPessoa, change})(PessoaList);
+export default reduxForm({
+	form: PESSOA_FORM
+})(connect(mapStateToProps, {fetchPessoa, deletePessoa, alterarPessoa, change})(PessoaList));

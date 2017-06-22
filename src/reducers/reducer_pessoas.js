@@ -3,14 +3,11 @@ import {FETCH_PESSOA, CREATE_PESSOA, DELETE_PESSOA, ALTERAR_PESSOA} from '../act
 
 export default function(state = {}, action) {	
 	switch (action.type) {
-		case FETCH_PESSOA:
-			console.log('FETCH_PESSOA');
+		case FETCH_PESSOA:			
 			return _.mapKeys(action.payload.data, 'id');
-		case CREATE_PESSOA:
-			console.log('CREATE_PESSOA');
+		case CREATE_PESSOA:			
 			return { ...state, [action.payload.data.id]: action.payload.data};
-		case DELETE_PESSOA:
-			console.log('DELETE_PESSOA');
+		case DELETE_PESSOA:			
 			return _.omit(state, action.payload.data);		
 		default:
 			return state;

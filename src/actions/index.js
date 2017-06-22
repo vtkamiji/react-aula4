@@ -29,8 +29,7 @@ export function fetchPosts() {
 	};*/
 }
 
-export function createPost(values, callback) {
-	console.log("saving post");
+export function createPost(values, callback) {	
 
 	const request = axios.post(`${ROOT_URL}/posts${API_KEY}`, values)
 		.then(() => callback());

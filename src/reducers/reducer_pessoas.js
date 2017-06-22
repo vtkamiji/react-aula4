@@ -1,8 +1,7 @@
 import _ from 'lodash';
 import {FETCH_PESSOA, CREATE_PESSOA, DELETE_PESSOA, ALTERAR_PESSOA} from '../actions/pessoaActions';
 
-export default function(state = {}, action) {
-	console.log("reducer_pessoas");
+export default function(state = {}, action) {	
 	switch (action.type) {
 		case FETCH_PESSOA:
 			console.log('FETCH_PESSOA');

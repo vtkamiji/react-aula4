@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { change } from 'redux-form';
 import { fetchPessoa, deletePessoa, alterarPessoa } from '../../actions/pessoaActions';
 import _ from 'lodash';
+import { PESSOA_FORM } from './pessoa_new';
 
 class PessoaList extends Component {
 	componentDidMount() {				
@@ -14,7 +15,9 @@ class PessoaList extends Component {
 	}
 	
 	alterarPessoa(pessoa) {
-		this.props.change(pessoa);
+		this.props.change(PESSOA_FORM, 'id', pessoa.id);
+		this.props.change(PESSOA_FORM, 'nome', pessoa.nome);
+		this.props.change(PESSOA_FORM, 'idade', pessoa.idade);
 		this.props.alterarPessoa(pessoa);
 	}
 

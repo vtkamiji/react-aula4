@@ -4,14 +4,20 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createPessoa } from '../../actions/pessoaActions';
 
+export const PESSOA_FORM = 'PessoaNewForm';
+
 class PessoaNew extends Component {
 
 	componentDidMount() {
-		console.log('PessoqNew-ComponentDidMount');
-		console.log(this.props.pessoas);
+		this.handleInitialize();		
 	}
 
-	renderField(field) {
+	handleInitialize(){
+		//Inicializa o form com valores passados no initialize
+		//this.props.initialize();
+	}
+
+	renderField(field) {		
 		const { meta: { touched, error } } = field;
 		const className = `form-group ${touched && error ? 'has-danger' : ''}`;
 
@@ -31,12 +37,12 @@ class PessoaNew extends Component {
 
 	onSubmit(values) {
 		this.props.createPessoa(values, () => {
-			values = null;
+			this.props.reset();
 		});
 	}
 
 	render() {
-		const { handleSubmit } = this.props;
+		const { handleSubmit, load, pristine, reset, submitting } = this.props;
 
 		return(
 			<div style={{marginBottom: '70px'}}>
@@ -57,11 +63,8 @@ function validate(values) {
 
 }
 
-function mapStateToProps({pessoa}) {		
-	return pessoa ;
-}
-
 export default reduxForm({
+	enableReinitialize: true,
 	validate: validate,
-	form: 'PessoaNewForm'
-})(connect(mapStateToProps, {createPessoa})(PessoaNew));
+	form: PESSOA_FORM
+})(connect(null, {createPessoa})(PessoaNew));

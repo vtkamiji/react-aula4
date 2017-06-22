@@ -6,8 +6,7 @@ import PessoaNew from './pessoa_new';
 
 
 class PessoaIndex extends Component {
-	componentDidMount() {
-		console.log("pessoaList Mount");
+	componentDidMount() {		
 	}
 
 	render() {

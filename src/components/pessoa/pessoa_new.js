@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Field, reduxForm, change } from 'redux-form';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { createPessoa } from '../../actions/pessoaActions';
+import { createPessoa, updatePessoa } from '../../actions/pessoaActions';
 
 export const PESSOA_FORM = 'PessoaNewForm';
 export const SAVE = 'save';
@@ -18,7 +18,7 @@ class PessoaNew extends Component {
 
 	componentWillReceiveProps(nextProps) {		
 		if (nextProps.formState === UPDATE) {
-			this.updatePessoa(nextProps.pessoa);
+			this.updatePessoa(nextProps.pessoa);			
 		}		
 	}
 
@@ -33,7 +33,8 @@ class PessoaNew extends Component {
 		//this.props.initialize();
 	}
 
-	renderField(field) {		
+	renderField(field) {
+		console.log(field);
 		const { meta: { touched, error } } = field;
 		const className = `form-group ${touched && error ? 'has-danger' : ''}`;
 
@@ -41,8 +42,9 @@ class PessoaNew extends Component {
 			<div className={className}>
 				<label htmlFor={field.label}>{field.label}</label>
 				<input name={field.name} 
-					type={field.type} 
-					{...field.input}
+					type={field.type}
+					{ ...field.input}
+					onBlur={() => {}}
 					disabled={field.disabled}
 					className="form-control"/>
 			
@@ -53,10 +55,27 @@ class PessoaNew extends Component {
 		);
 	}
 
+	reset() {
+		console.log('reset');
+		
+		this.props.reset();
+	}
+
 	onSubmit(values) {
-		this.props.createPessoa(values, () => {
-			this.props.reset();
-		});
+		console.log('onSubmit');
+		console.log(values);
+		switch (this.props.formState) {
+			case SAVE:
+				this.props.createPessoa(values, () => {
+					this.props.reset();
+				// this.updatePessoa({id:null, nome:null, idade:null});
+			});				
+			case UPDATE:
+				this.props.updatePessoa(values, () => {
+					this.props.reset();
+				this.updatePessoa({id:null, nome:null, idade:null});
+			});
+		}
 	}
 
 	render() {
@@ -80,7 +99,7 @@ class PessoaNew extends Component {
 						className="btn btn-danger pull-xs-right">
 						Altear Pessoa</button>
 					<button style={{display: formState == UPDATE?'block':'none'}} 
-						type="submit" 
+						type="button" onClick={this.reset.bind(this)}
 						className="btn btn-primary pull-xs-right">
 						Cancelar</button>
 				</form>		
@@ -127,4 +146,4 @@ export default reduxForm({
 	enableReinitialize: true,
 	validate: validate,
 	form: PESSOA_FORM
-})(connect(mapStateToProps, {createPessoa, change})(PessoaNew));
+})(connect(mapStateToProps, {createPessoa, updatePessoa, change})(PessoaNew));

@@ -76,6 +76,8 @@ class PessoaList extends Component {
 }
 
 function mapStateToProps(state) {
+	console.log('pessoalist - mapStateToProps');
+	console.log(state);
 	return {pessoas: state.pessoas};
 }
 

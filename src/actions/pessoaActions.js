@@ -36,7 +36,7 @@ export function deletePessoa(pessoa) {
 
 export function updatePessoa(pessoa, callback) {
 	callback();
-	console.log('action: updatePessoa'+pessoa);
+
 	return {
 		type: UPDATE_PESSOA,
 		payload: { data: pessoa }

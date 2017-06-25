@@ -12,20 +12,19 @@ export const UPDATE = 'update';
 class PessoaNew extends Component {
 
 	componentDidMount() {
-		this.handleInitialize();
-		console.log(this.props.formState);
+		this.handleInitialize();		
 	}
 
 	componentWillReceiveProps(nextProps) {		
 		if (nextProps.formState === UPDATE) {
-			this.updatePessoa(nextProps.pessoa);			
+			this.updatePessoaForm(nextProps.pessoa);
 		}		
 	}
 
-	updatePessoa(pessoa) {		
-		this.props.change(PESSOA_FORM, 'id', pessoa.id);
-		this.props.change(PESSOA_FORM, 'nome', pessoa.nome);
-		this.props.change(PESSOA_FORM, 'idade', pessoa.idade);
+	updatePessoaForm(pessoaForm) {		
+		this.props.change(PESSOA_FORM, 'id', pessoaForm.id);
+		this.props.change(PESSOA_FORM, 'nome', pessoaForm.nome);
+		this.props.change(PESSOA_FORM, 'idade', pessoaForm.idade);
 	}
 
 	handleInitialize(){
@@ -33,13 +32,12 @@ class PessoaNew extends Component {
 		//this.props.initialize();
 	}
 
-	renderField(field) {
-		console.log(field);
+	renderField(field) {		
 		const { meta: { touched, error } } = field;
 		const className = `form-group ${touched && error ? 'has-danger' : ''}`;
 
-		return (
-			<div className={className}>
+		return (		
+			<div className={className}>				
 				<label htmlFor={field.label}>{field.label}</label>
 				<input name={field.name} 
 					type={field.type}
@@ -51,19 +49,11 @@ class PessoaNew extends Component {
 				<div className="text-help">
 					{touched ? error : ''}
 				</div>
-			</div>
+			</div>			
 		);
-	}
+	}	
 
-	reset() {
-		console.log('reset');
-		
-		this.props.reset();
-	}
-
-	onSubmit(values) {
-		console.log('onSubmit');
-		console.log(values);
+	onSubmit(values) {		
 		switch (this.props.formState) {
 			case SAVE:
 				this.props.createPessoa(values, () => {
@@ -72,8 +62,9 @@ class PessoaNew extends Component {
 			});				
 			case UPDATE:
 				this.props.updatePessoa(values, () => {
+					this.updatePessoaForm({id:null, nome:null, idade:null});
 					this.props.reset();
-				this.updatePessoa({id:null, nome:null, idade:null});
+					//this.props.formState = SAVE;
 			});
 		}
 	}
@@ -84,7 +75,7 @@ class PessoaNew extends Component {
 
 		return(
 			<div style={{marginBottom: '70px'}}>
-				
+				<h2>{formState == SAVE?'Cadastrar ':'Alterar '}Pessoa</h2>
 				<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 					<Field name="id" label="id" type="number" disabled={isUpdate} component={this.renderField}/>
 					<Field name="nome" label="Nome" type="text" component={this.renderField}/>
@@ -99,7 +90,7 @@ class PessoaNew extends Component {
 						className="btn btn-danger pull-xs-right">
 						Altear Pessoa</button>
 					<button style={{display: formState == UPDATE?'block':'none'}} 
-						type="button" onClick={this.reset.bind(this)}
+						type="submit"
 						className="btn btn-primary pull-xs-right">
 						Cancelar</button>
 				</form>		
@@ -107,6 +98,17 @@ class PessoaNew extends Component {
 		);
 	}
 }
+
+function mapStateToProps({pessoa}) {	
+	const formState = _.isEmpty(pessoa)?SAVE:UPDATE;
+	return { pessoa, formState };
+}
+
+export default reduxForm({
+	enableReinitialize: true,
+	validate: validate,
+	form: PESSOA_FORM
+})(connect(mapStateToProps, {createPessoa, updatePessoa, change})(PessoaNew));
 
 function validate(values) {
 	const errors = {};
@@ -136,14 +138,3 @@ function validateIdade(value, errors) {
 		errors.idade = 'Idade errada';
 	}
 }
-
-function mapStateToProps({pessoa}) {	
-	const formState = _.isEmpty(pessoa)?SAVE:UPDATE;
-	return { pessoa, formState };
-}
-
-export default reduxForm({
-	enableReinitialize: true,
-	validate: validate,
-	form: PESSOA_FORM
-})(connect(mapStateToProps, {createPessoa, updatePessoa, change})(PessoaNew));

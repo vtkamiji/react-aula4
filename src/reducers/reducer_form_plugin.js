@@ -6,11 +6,9 @@ import { PESSOA_FORM } from '../components/pessoa/pessoa_new';
 export default formReducer.plugin({
 		PESSOA_FORM: (state, action) => {
 			switch(action.type) {
-				case CREATE_PESSOA:
-					console.log('REDUCER_FORM_PLUGIN'+action.type);
+				case CREATE_PESSOA:					
 					return undefined;
-				case UPDATE_PESSOA:
-					console.log('REDUCER_FORM_PLUGIN'+action.type);
+				case UPDATE_PESSOA:					
 					return undefined;
 				default:
 					return state;

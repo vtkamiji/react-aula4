@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createPessoa, updatePessoa } from '../../actions/pessoaActions';
 
+import { DatePicker, TextField } from 'material-ui';
+
 export const PESSOA_FORM = 'PessoaNewForm';
 export const SAVE = 'save';
 export const UPDATE = 'update';
@@ -12,16 +14,16 @@ export const UPDATE = 'update';
 class PessoaNew extends Component {
 
 	componentDidMount() {
-		this.handleInitialize();		
+		this.handleInitialize();
 	}
 
-	componentWillReceiveProps(nextProps) {		
+	componentWillReceiveProps(nextProps) {
 		if (nextProps.formState === UPDATE) {
 			this.updatePessoaForm(nextProps.pessoa);
-		}		
+		}
 	}
 
-	updatePessoaForm(pessoaForm) {		
+	updatePessoaForm(pessoaForm) {
 		this.props.change(PESSOA_FORM, 'id', pessoaForm.id);
 		this.props.change(PESSOA_FORM, 'nome', pessoaForm.nome);
 		this.props.change(PESSOA_FORM, 'idade', pessoaForm.idade);
@@ -32,34 +34,37 @@ class PessoaNew extends Component {
 		//this.props.initialize();
 	}
 
-	renderField(field) {		
+	renderField(field) {
 		const { meta: { touched, error } } = field;
 		const className = `form-group ${touched && error ? 'has-danger' : ''}`;
 
-		return (		
-			<div className={className}>				
-				<label htmlFor={field.label}>{field.label}</label>
-				<input name={field.name} 
-					type={field.type}
-					{ ...field.input}
-					onBlur={() => {}}
-					disabled={field.disabled}
-					className="form-control"/>
-			
-				<div className="text-help">
-					{touched ? error : ''}
-				</div>
-			</div>			
-		);
-	}	
+		if (field.type == 'date') {
+			return (
+				<DatePicker hintText="Data de Nascimento" />
+			);
+		}
 
-	onSubmit(values) {		
+		return (
+			<div className={className}>
+				<TextField name={field.name}
+      				hintText="Message Field"
+      				floatingLabelText={field.label}
+      				{ ...field.input}
+      				disabled={field.disabled}
+					errorText={touched ? error : ''}
+    			/>
+
+			</div>
+		);
+	}
+
+	onSubmit(values) {
 		switch (this.props.formState) {
 			case SAVE:
 				this.props.createPessoa(values, () => {
 					this.props.reset();
 				// this.updatePessoa({id:null, nome:null, idade:null});
-			});				
+			});
 			case UPDATE:
 				this.props.updatePessoa(values, () => {
 					this.updatePessoaForm({id:null, nome:null, idade:null});
@@ -80,26 +85,27 @@ class PessoaNew extends Component {
 					<Field name="id" label="id" type="number" disabled={isUpdate} component={this.renderField}/>
 					<Field name="nome" label="Nome" type="text" component={this.renderField}/>
 					<Field name="idade" label="Idade" type="number" component={this.renderField}/>
-					
-					<button style={{display: formState == SAVE?'block':'none'}} 
-						type="submit" 
+					<Field name="dataNasc" label="Data de nascimento" type="date" component={this.renderField}/>
+
+					<button style={{display: formState == SAVE?'block':'none'}}
+						type="submit"
 						className="btn btn-primary pull-xs-right">
 						Adicionar Pessoa</button>
-					<button style={{display: formState == UPDATE?'block':'none'}} 
-						type="submit" 
+					<button style={{display: formState == UPDATE?'block':'none'}}
+						type="submit"
 						className="btn btn-danger pull-xs-right">
 						Altear Pessoa</button>
-					<button style={{display: formState == UPDATE?'block':'none'}} 
+					<button style={{display: formState == UPDATE?'block':'none'}}
 						type="submit"
 						className="btn btn-primary pull-xs-right">
 						Cancelar</button>
-				</form>		
+				</form>
 			</div>
 		);
 	}
 }
 
-function mapStateToProps({pessoa}) {	
+function mapStateToProps({pessoa}) {
 	const formState = _.isEmpty(pessoa)?SAVE:UPDATE;
 	return { pessoa, formState };
 }
@@ -118,7 +124,7 @@ function validate(values) {
 	return errors;
 }
 
-function validateID(value, errors) {	
+function validateID(value, errors) {
 	if (!value) {
 		errors.id = 'ID não pode ser vazio';
 	}

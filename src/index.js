@@ -18,17 +18,20 @@ import PessoaIndex from './components/pessoa/pessoa_index';
 
 injectTapEventPlugin();
 const createStoreWithMiddleware = applyMiddleware(promise, thunk)(createStore);
+/*exporta o store para que possa ser usado em componentes filhos que usam
+redux e são filhos de componentes criados */
+export const store = createStoreWithMiddleware(reducers);
 	/*<Switch> serve para pegar apenas o primeiro caminho que combinar com a URL*/
 ReactDOM.render(
   <MuiThemeProvider>
-  <Provider store={createStoreWithMiddleware(reducers)}>
+  <Provider store={ store }>
     <BrowserRouter>
     	<div>
 			<Switch>
         <Route path="/pessoa" component={PessoaIndex} />
 				<Route path="/posts/new" component={PostsNew} />
 				<Route path="/posts/:id" component={PostsShow} />
-    			<Route path="/" component={PostsIndex}/>
+    		<Route path="/" component={PostsIndex}/>
 			</Switch>
     	</div>
     </BrowserRouter>

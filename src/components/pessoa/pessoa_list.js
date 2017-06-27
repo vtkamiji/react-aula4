@@ -1,53 +1,62 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, change } from 'redux-form';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
 import { fetchPessoa, deletePessoa, alterarPessoa } from '../../actions/pessoaActions';
 import _ from 'lodash';
 import { PESSOA_FORM } from './pessoa_new';
 
 class PessoaList extends Component {
-	componentDidMount() {				
-		this.props.fetchPessoa();		
+	componentDidMount() {
+		this.props.fetchPessoa();
 	}
 
-	deletePessoa(pessoa) {		
+	deletePessoa(pessoa) {
 		this.props.deletePessoa(pessoa);
 	}
-	
-	alterarPessoa(pessoa) {		
+
+	alterarPessoa(pessoa) {
 		// this.props.change(PESSOA_FORM, 'id', pessoa.id);
 		// this.props.change(PESSOA_FORM, 'nome', pessoa.nome);
 		// this.props.change(PESSOA_FORM, 'idade', pessoa.idade);
 		this.props.alterarPessoa(pessoa);
-		
+
 	}
 
 	renderPessoas() {
 		return _.map(this.props.pessoas, pessoa => {
-				
-				return (					
+
+				return (
 					<tr key={pessoa.id}>
 						<td style={{width:'10%'}}>{pessoa.id}</td>
 						<td style={{width:'30%'}}>{pessoa.nome}</td>
-						<td style={{width:'10%'}}>{pessoa.idade}</td>	
+						<td style={{width:'10%'}}>{pessoa.idade}</td>
 						<td>
 							<div className="pull-xs-right">
-								<button className="btn btn-secondary" 									
+								<button className="btn btn-secondary"
 									style={{marginRight: '10px'}}
 									onClick={this.alterarPessoa.bind(this,pessoa)}>
 									Alterar
 								</button>
-								<button className="btn btn-danger" 
+								<button className="btn btn-danger"
 									onClick={this.deletePessoa.bind(this,pessoa)}>Apagar
-								</button>							
+								</button>
 							</div>
-						</td>					
+						</td>
 					</tr>
 				);
 			});
 	}
 
 	render() {
+		const transitionOptions = {
+			transitionName: "fade",
+			transitionEnterTimeout: 500,
+			transitionTimeout: 500,
+			transitionLeaveTimeout: 500
+		}
+
 		if (!this.props.pessoas) {
 			return(
 				<div>Loading</div>
@@ -55,7 +64,7 @@ class PessoaList extends Component {
 		}
 
 		return (
-			<div>	
+			<div>
 				<h2>Lista de Pessoas Cadastradas</h2>
 				<table className="table table-striped">
 					<thead>
@@ -67,15 +76,17 @@ class PessoaList extends Component {
 					    </tr>
 					</thead>
 					<tbody>
-						{this.renderPessoas()}
+						<ReactCSSTransitionGroup {...transitionOptions}>
+							{this.renderPessoas()}
+						</ReactCSSTransitionGroup>
 					</tbody>
 				</table>
 			</div>
-		);		
+		);
 	}
 }
 
-function mapStateToProps(state) {	
+function mapStateToProps(state) {
 	return {pessoas: state.pessoas};
 }
 

@@ -12,6 +12,12 @@ export const SAVE = 'save';
 export const UPDATE = 'update';
 
 class PessoaNew extends Component {
+	//Retorna true ou false se o componente
+	//deve atuazlizar após a 1 renderização com
+	//a chegada de novos estados
+	shouldComponentUpdate() {
+
+	}
 
 	componentDidMount() {
 		this.handleInitialize();
